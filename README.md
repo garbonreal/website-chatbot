@@ -1,4 +1,4 @@
-# ai-chatbot
+# website-chatbot
 ### Goal
 General: AI chatbot that can handle user queries, generate appropriate responses, and provide reference links where necessary.  
 Layout: website background + chatbot as the right conner
