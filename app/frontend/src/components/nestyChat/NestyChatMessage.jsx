@@ -1,8 +1,11 @@
 import React from "react";
+import { useRecoilValue } from "recoil";
 import styled, { keyframes } from "styled-components";
 import Icon from "/src/assets/nesty.svg";
 import TopVectorTipBlue from "../../assets/top-vector-tip-blue.svg";
 import TopVectorTipGrey from "../../assets/top-vector-tip-grey.svg";
+import { urlMapAtom } from "../../states";
+import { useLoadUrlMap } from "./UrlMap";
 
 const MessageContainer = styled.div`
   display: flex;
@@ -24,14 +27,14 @@ const UserMessageContainer = styled.div`
 
 const MessageBubble = styled.div`
   background-color: ${({ theme, $sender }) =>
-    $sender === "Nesty" ? theme.colors.lightGrey : theme.colors.primaryBlue};
-  border-radius: ${({ $sender }) => ($sender === "Nesty" ? "0 8px 8px 8px" : "8px 0 8px 8px")};
+    $sender === "assistant" ? theme.colors.lightGrey : theme.colors.primaryBlue};
+  border-radius: ${({ $sender }) => ($sender === "assistant" ? "0 8px 8px 8px" : "8px 0 8px 8px")};
   padding: ${({ theme }) => `${theme.spacings[3]} ${theme.spacings[4]}`};
   display: flex;
   gap: ${({ theme }) => theme.spacings[1]};
   flex-direction: column;
   max-width: 90%;
-  color: ${({ theme, $sender }) => ($sender === "Nesty" ? theme.colors.black : theme.colors.white)};
+  color: ${({ theme, $sender }) => ($sender === "assistant" ? theme.colors.black : theme.colors.white)};
   & > h5 {
     text-align: right;
     font-weight: ${({ theme }) => theme.fontWeights.normal};
@@ -68,11 +71,32 @@ const AnimatedMessage = styled.div`
   animation: ${fadeIn} 0.15s ease-out;
 `;
 
-const NestyChatMessage = ({ sender, message, time }) => {
+const Reference = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  white-space: nowrap;
+  font-size: 0.95rem;
+
+  a {
+    margin-left: 4px;
+    text-decoration: none;
+  }
+
+  span.reference-label {
+    margin-right: 4px;
+    font-weight: bold;
+  }
+`;
+
+const NestyChatMessage = ({ sender, message, time, source = [] }) => {
+  useLoadUrlMap();
+  const urlMap = useRecoilValue(urlMapAtom);
+
   return (
     <AnimatedMessage>
       <MessageContainer>
-        {sender === "Nesty" ? (
+        {sender === "assistant" ? (
           <NestyMessageContainer>
             <img style={{ height: "32px" }} src={Icon} alt="Icon" />
             <img style={{ transform: "translateX(1px)" }} src={TopVectorTipGrey} />
@@ -89,6 +113,25 @@ const NestyChatMessage = ({ sender, message, time }) => {
                   </React.Fragment>
                 ))}
               </p>
+              
+              {source.length > 0 && (
+                <div>
+                  <Reference>
+                    <span className="reference-label">References:</span>
+                    {source.map((item, index) => (
+                      <a
+                        key={index}
+                        href={urlMap[item]}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        [{index + 1}]
+                      </a>
+                    ))}
+                  </Reference>
+                </div>
+              )}
+
               <h5>{time}</h5>
             </MessageBubble>
           </NestyMessageContainer>

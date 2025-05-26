@@ -5,7 +5,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-image: url("/public/background.svg");
+  background-image: url('/public/background.svg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -63,6 +63,7 @@ p {
   line-height: 1.75rem;
   font-weight: 400;
 }
+
 
 a {
   text-decoration: none;

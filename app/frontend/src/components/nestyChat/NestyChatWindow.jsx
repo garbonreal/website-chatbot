@@ -79,8 +79,9 @@ function NestyChatWindow() {
         {messages.map((message, index) => (
           <NestyChatMessage
             key={index}
-            sender={message.sender}
-            message={message.message}
+            sender={message.role}
+            message={message.content}
+            source={message.source}
             time={message.time}
           />
         ))}

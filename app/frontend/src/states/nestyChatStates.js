@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import { getFormattedTime } from "../util";
+import { time } from "framer-motion";
 
 // Atom for showing/hiding the chatbot
 export const showNestyChatAtom = atom({
@@ -12,8 +13,9 @@ export const nestyChatMessageHistoryAtom = atom({
   key: "nestyChatMessageHistoryAtom",
   default: [
     {
-      sender: "Nesty",
-      message: "Hello! How can I assist you today?",
+      role: "assistant",
+      content: "Hello! How can I assist you today?",
+      source: [],
       time: getFormattedTime(new Date()),
     },
   ],
@@ -29,4 +31,9 @@ export const isNestyChatThinkingAtom = atom({
 export const nestyChatErrorAtom = atom({
   key: "nestyChatErrorAtom",
   default: "",
+});
+
+export const urlMapAtom = atom({
+  key: "urlMapAtom",
+  default: {},
 });

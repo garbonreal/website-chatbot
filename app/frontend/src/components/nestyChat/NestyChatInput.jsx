@@ -43,6 +43,7 @@ function NestyChatInput() {
   const NestyChatActions = useNestyChatActions();
   const showNestyChat = useRecoilValue(showNestyChatAtom);
   const setMessages = useSetRecoilState(nestyChatMessageHistoryAtom);
+  const messageHistory = useRecoilValue(nestyChatMessageHistoryAtom);
   const [isNestyChatThinking, setIsNestyChatThinking] = useRecoilState(isNestyChatThinkingAtom);
   const setNestyChatError = useSetRecoilState(nestyChatErrorAtom);
 
@@ -64,20 +65,44 @@ function NestyChatInput() {
       setMessages((prev) => [
         ...prev,
         {
-          sender: "user",
-          message: inputValue,
+          role: "user",
+          content: inputValue,
           time: getFormattedTime(today),
         },
       ]);
       setInputValue(""); // Clear the input field after sending
       setIsNestyChatThinking(true);
-      const response = await NestyChatActions.sendMessage(inputValue);
+
+      const messagesToSend = [
+        ...messageHistory.map(({ role, content }) => ({ role, content })),
+        { role: "user", content: inputValue }
+      ]
+
+      const response = await NestyChatActions.sendMessage(messagesToSend);
+
+      const sourceFiles = response.context?.data_points?.text?.map((text) => {
+        return text.split(":", 1)[0].trim();
+      }) ?? [];
+
+      const uniqueSources = [...new Set(sourceFiles)];
+
+      const citationMap = uniqueSources.reduce((acc, src, idx) => {
+        acc[src] = idx + 1;
+        return acc;
+      }, {});
+
+      const renderedMessage = response.message.content.replace(/\[([^\]]+?)\]/g, (match, file) => {
+        const number = citationMap[file];
+        return number ? `[${number}]` : match;
+      });
+      
       setIsNestyChatThinking(false);
       setMessages((prev) => [
         ...prev,
         {
-          sender: "Nesty",
-          message: response.message.content,
+          role: "assistant",
+          content: renderedMessage,
+          source: uniqueSources,
           time: getFormattedTime(today),
         },
       ]);
