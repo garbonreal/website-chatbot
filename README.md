@@ -47,8 +47,6 @@ Key functionalities include dynamic web scraping of the website’s full content
 
 ### Azure development of chat app
 
-### Local environment
-
 1. Setting up:
 
     - Download [Azure Developer CLI](https://aka.ms/azure-dev/install)
