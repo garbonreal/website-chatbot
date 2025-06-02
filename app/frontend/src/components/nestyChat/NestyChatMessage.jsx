@@ -1,11 +1,12 @@
 import React from "react";
 import { useRecoilValue } from "recoil";
 import styled, { keyframes } from "styled-components";
-import Icon from "/src/assets/nesty.svg";
+import Icon from "/src/assets/nestle.png";
 import TopVectorTipBlue from "../../assets/top-vector-tip-blue.svg";
 import TopVectorTipGrey from "../../assets/top-vector-tip-grey.svg";
 import { urlMapAtom } from "../../states";
 import { useLoadUrlMap } from "./UrlMap";
+import GoogleMapsStoreDisplay from "./GoogleMap";
 
 const MessageContainer = styled.div`
   display: flex;
@@ -27,7 +28,7 @@ const UserMessageContainer = styled.div`
 
 const MessageBubble = styled.div`
   background-color: ${({ theme, $sender }) =>
-    $sender === "assistant" ? theme.colors.lightGrey : theme.colors.primaryBlue};
+    $sender === "assistant" ? theme.colors.lightGrey : theme.colors.smokeGrey};
   border-radius: ${({ $sender }) => ($sender === "assistant" ? "0 8px 8px 8px" : "8px 0 8px 8px")};
   padding: ${({ theme }) => `${theme.spacings[3]} ${theme.spacings[4]}`};
   display: flex;
@@ -38,11 +39,12 @@ const MessageBubble = styled.div`
   & > h5 {
     text-align: right;
     font-weight: ${({ theme }) => theme.fontWeights.normal};
+    color: ${({ theme, $sender }) => ($sender === "assistant" ? theme.colors.darkGrey : theme.colors.black)};
   }
   & > p {
     overflow-wrap: break-word;
     margin-right: ${({ theme }) => theme.spacings[8]};
-  }
+    color: ${({ theme, $sender }) => ($sender === "assistant" ? theme.colors.darkGrey : theme.colors.black)};
 `;
 
 const MessageBubbleNestyHeader = styled.div`
@@ -81,6 +83,11 @@ const Reference = styled.div`
   a {
     margin-left: 4px;
     text-decoration: none;
+    color: ${({ theme }) => theme.colors.darkGrey};
+    &:hover  {
+      text-decoration: underline;
+      color: ${({ theme }) => theme.colors.smokeGrey};
+    }
   }
 
   span.reference-label {
@@ -89,7 +96,87 @@ const Reference = styled.div`
   }
 `;
 
-const NestyChatMessage = ({ sender, message, time, source = [] }) => {
+const StoreLocationsContainer = styled.div`
+  margin-top: 12px;
+  padding: 12px;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+`;
+
+const StoreLocationTitle = styled.div`
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: ${({ theme }) => theme.colors.darkGrey};
+  font-size: 1rem;
+`;
+
+const StoreLocationList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
+const StoreLocationItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`;
+
+const StoreLink = styled.a`
+  color: ${({ theme }) => theme.colors.black};
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  
+  &:hover {
+    text-decoration: underline;
+    color: ${({ theme }) => theme.colors.smokeGrey};
+  }
+  
+  &:visited {
+    color: ${({ theme }) => theme.colors.smokeGrey};
+  }
+`;
+
+const StoreAddress = styled.span`
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.darkGrey};
+  opacity: 0.8;
+`;
+
+const AmazonLinksContainer = styled.div`
+  margin-top: 12px;
+  margin-bottom: 12px;
+  padding: 12px;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+`;
+
+const AmazonLink = styled.a`
+  color:${({ theme }) => theme.colors.darkGrey};
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  
+  &:hover {
+    text-decoration: underline;
+    color:${({ theme }) => theme.colors.smokeGrey};
+  }
+  
+  &:visited {
+    color:${({ theme }) => theme.colors.darkGrey};
+  }
+  
+  &: before {
+    content: "🛒"; /* Shopping cart emoji */
+    margin-right: 4px;
+  }
+`;
+
+const NestyChatMessage = ({ sender, message, time, source = [], storeLocations = [], amazonLinks = [] }) => {
   useLoadUrlMap();
   const urlMap = useRecoilValue(urlMapAtom);
 
@@ -130,6 +217,49 @@ const NestyChatMessage = ({ sender, message, time, source = [] }) => {
                     ))}
                   </Reference>
                 </div>
+              )}
+
+              {/* Store Locations Section */}
+              {storeLocations.length > 0 && (
+                <StoreLocationsContainer>
+                  <StoreLocationTitle>Shops Nearby:</StoreLocationTitle>
+                  <StoreLocationList>
+                    {storeLocations.map((store, index) => (
+                      <StoreLocationItem key={index}>
+                        <StoreLink 
+                          href={store.maps_url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                        >
+                          {store.name}
+                        </StoreLink>
+                        {store.address && (
+                          <StoreAddress>{store.address}</StoreAddress>
+                        )}
+                      </StoreLocationItem>
+                    ))}
+                  </StoreLocationList>
+                </StoreLocationsContainer>
+              )}
+            
+              {/* Amazon Purchase Links Section */}
+              {amazonLinks.length > 0 && (
+                <AmazonLinksContainer>
+                  <StoreLocationTitle>Buy Online:</StoreLocationTitle>
+                  <StoreLocationList>
+                    {amazonLinks.map((item, index) => (
+                      <StoreLocationItem key={index}>
+                        <AmazonLink 
+                          href={item.amazon_url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                        >
+                          Buy {item.product_name} on Amazon
+                        </AmazonLink>
+                      </StoreLocationItem>
+                    ))}
+                  </StoreLocationList>
+                </AmazonLinksContainer>
               )}
 
               <h5>{time}</h5>

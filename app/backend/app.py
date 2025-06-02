@@ -55,6 +55,7 @@ from approaches.chatreadretrievereadvision import ChatReadRetrieveReadVisionAppr
 from approaches.promptmanager import PromptyManager
 from approaches.retrievethenread import RetrieveThenReadApproach
 from approaches.retrievethenreadvision import RetrieveThenReadVisionApproach
+from approaches.locationservice import LocationService
 from chat_history.cosmosdb import chat_history_cosmosdb_bp
 from config import (
     CONFIG_ASK_APPROACH,
@@ -86,6 +87,7 @@ from config import (
     CONFIG_USER_BLOB_CONTAINER_CLIENT,
     CONFIG_USER_UPLOAD_ENABLED,
     CONFIG_VECTOR_SEARCH_ENABLED,
+    CONFIG_GOOGLE_MAPS_API_KEY
 )
 from core.authentication import AuthenticationHelper
 from core.sessionhelper import create_session_id
@@ -189,10 +191,33 @@ async def ask():
         r = await approach.run(
             request_json["messages"], context=context, session_state=request_json.get("session_state")
         )
+
+        await _enhance_response_with_location_info(request_json, r)
+
         return jsonify(r)
     except Exception as error:
         return error_response(error, "/ask")
 
+
+async def _enhance_response_with_location_info(request_json: dict, response: dict):
+    api_key = "AIzaSyC9kBOGXQsUrjvMGivbK_KcEPR6YXJtZpc" # current_app.config[CONFIG_GOOGLE_MAPS_API_KEY]
+    location_service = LocationService(api_key)
+    
+    user_message = location_service.get_latest_user_message(request_json["messages"])
+    if not user_message or not location_service.is_asking_where_to_buy(user_message):
+        return
+    
+    user_location = request_json.get("location")
+    if not user_location:
+        return
+    
+    results = await location_service.find_nearby_stores(user_location)
+    if not results:
+        return
+    
+    response["message"]["content"] = response["message"]["content"].split("I don't know")[0]
+    response["results"] = results
+    response["amazon_links"] = location_service.get_amazon_link()
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):

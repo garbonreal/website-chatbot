@@ -1,5 +1,5 @@
 import React from "react";
-import Icon from "/src/assets/nesty.svg";
+import Icon from "/src/assets/nestle.png";
 import minimizerIcon from "/src/assets/minimize.svg";
 import maximizerIcon from "/src/assets/maximize.svg";
 import closeIcon from "/src/assets/close.svg";
@@ -50,11 +50,13 @@ function NestyChatHeader() {
         </div>
       )}
       <IconContainer>
-        {showNestyChat === "min" ? (
-          <NestyChatHeaderIcon onClick={(e) => setShowNestyChat("max")} src={maximizerIcon} />
-        ) : (
-          <NestyChatHeaderIcon onClick={(e) => setShowNestyChat("min")} src={minimizerIcon} />
-        )}
+        <span style={{ display: window.innerWidth <= 768 ? 'none' : 'block' }}>
+          {showNestyChat === "min" ? (
+            <NestyChatHeaderIcon onClick={(e) => setShowNestyChat("max")} src={maximizerIcon} />
+          ) : (
+            <NestyChatHeaderIcon onClick={(e) => setShowNestyChat("min")} src={minimizerIcon} />
+          )}
+        </span>
         <NestyChatHeaderIcon onClick={(e) => setShowNestyChat("close")} src={closeIcon} />
       </IconContainer>
     </NestyChatHeaderStyle>

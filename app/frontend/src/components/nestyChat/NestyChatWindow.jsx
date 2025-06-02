@@ -44,6 +44,10 @@ const NestyChatWindowContainer = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.large};
   box-shadow: ${({ theme }) => theme.boxShadows.large};
 
+  @media (max-width: 768px) {
+    max-height: 95%;
+  }
+
   ${({ $showStatus }) =>
     $showStatus === "max" &&
     `
@@ -82,6 +86,8 @@ function NestyChatWindow() {
             sender={message.role}
             message={message.content}
             source={message.source}
+            storeLocations={message.storeLocations || []}
+            amazonLinks={message.amazonLinks || []}
             time={message.time}
           />
         ))}

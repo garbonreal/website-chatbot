@@ -18,7 +18,7 @@
 </div>
 
 <div align="center" style="text-align:center;">
-  <img src="demo/demo.gif" alt="Demo" width="380" height="auto">
+  <img src="demo/demo.gif" alt="Demo" width="700" height="auto">
   <div style="margin-top: 20px;"></div>
   <figcaption style="text-align:center"><em>Nesty answers users' questions based on the website information and provides reference paths.</em></figcaption>
 </div>

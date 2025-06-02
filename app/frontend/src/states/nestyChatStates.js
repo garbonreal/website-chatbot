@@ -37,3 +37,18 @@ export const urlMapAtom = atom({
   key: "urlMapAtom",
   default: {},
 });
+
+export const userLocationAtom = atom({
+  key: "userLocationAtom",
+  default: null,
+});
+
+export const locationLoadingAtom = atom({
+  key: "locationLoadingAtom",
+  default: false,
+});
+
+export const locationErrorAtom = atom({
+  key: "locationErrorAtom",
+  default: null,
+});

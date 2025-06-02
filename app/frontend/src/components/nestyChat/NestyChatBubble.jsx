@@ -1,5 +1,5 @@
 import React from "react";
-import NestyChatLogo from "../../assets/nesty.svg";
+import NestyChatLogo from "../../assets/nestle.png";
 import styled from "styled-components";
 import { showNestyChatAtom } from "../../states";
 import { useRecoilState } from "recoil";
@@ -18,7 +18,7 @@ const NestyChatButton = styled.div`
   align-items: center;
   transition: 0.2s;
   > p {
-    color: ${({ theme }) => theme.colors.primaryBlue};
+    color: #555555;
     margin-right: 15px;
     font-size: 16px;
     font-weight: 500;
@@ -31,6 +31,32 @@ const NestyChatButton = styled.div`
     `
       transform: translateY(100%)
     `}
+  
+  @media (max-width: 768px) {
+    right: 15px;
+    bottom: 15px;
+    padding: 12px 16px;
+    
+    > p {
+      font-size: 14px;
+      margin-right: 10px;
+    }
+    
+    img {
+      height: 32px !important;
+      width: 32px !important;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    right: 10px;
+    bottom: 10px;
+    padding: 10px 12px;
+    
+    > p {
+      display: none;
+    }
+  }
 `;
 
 function NestyChatBubble() {
@@ -39,7 +65,7 @@ function NestyChatBubble() {
   return (
     <NestyChatButton $showNestytChat={showNestyChat} size="large" onClick={(e) => setShowNestyChat("min")}>
       <p>Ask Nesty</p>
-      <img src={NestyChatLogo} height={30} width={30} />
+      <img src={NestyChatLogo} height={40} width={40} />
     </NestyChatButton>
   );
 }

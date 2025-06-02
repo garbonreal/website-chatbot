@@ -15,10 +15,10 @@ const theme = {
 
     // Neutrals
     white: "#ffffff", // white
-    smokeGrey: "#F9FAFB", // light background
+    smokeGrey: "#D1CBC5", // light background
     lightGrey: "#F3F3F8", // abi chat background
     grey: "#D0D5DD", // borders
-    darkGrey: "#667085", // unselected text
+    darkGrey: "#555555", // unselected text
     lightBlack: "#344054", // text
     black: "#101828", // near black, used for text in inputs
 

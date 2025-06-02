@@ -434,3 +434,6 @@ yarl==1.17.2
     # via aiohttp
 zipp==3.21.0
     # via importlib-metadata
+googlemaps==4.10.0
+    # via -r requirements.in
+    # This package is used for geocoding and reverse geocoding in the application.
