@@ -43,6 +43,52 @@ Key functionalities include dynamic web scraping of the website’s full content
 
 ---
 
+## Update
+
+### Real-Time Chat UI Enhancement
+
+1. The latest messages auto-scroll into view without requiring user input (mouse scroll).
+2. The chat window has a clean, mobile-friendly layout.
+3. The design follows Nestlé’s visual guidelines (use Nestlé logo, font, and colors as inspiration).
+
+<div align="center" style="text-align:center;">
+  <img src="demo/mobile.gif" alt="Demo" width="200" height="auto">
+  <div style="margin-top: 20px;"></div>
+  <figcaption style="text-align:center"><em>Nesty can automatically adapt to the size of the mobile phone screen.</em></figcaption>
+</div>
+
+### Extend the bot’s product reply logic
+
+1. Amazon Purchase Link Integration
+2. Store Locator with Geolocation
+
+<div align="center" style="text-align:center;">
+  <img src="demo/geo_and_online_stores.gif" alt="Demo" width="700" height="auto">
+  <div style="margin-top: 20px;"></div>
+  <figcaption style="text-align:center"><em>Nesty provides nearby store locations or online links if the user asked about a product.</em></figcaption>
+</div>
+
+### Handle structured queries
+
+Due to time constraints, currently the bot only support answering questions related to categorization.
+
+POC (proof of concept) sample dataset
+```
+"How many Nestlé products are listed on the site?",
+"How many coffee products are there?",
+"How many products are there under the chocolate category?",
+"How many spring water products do we have?",
+"How many ice cream products are available?"
+```
+
+<div align="center" style="text-align:center;">
+  <img src="demo/structured_queries.gif" alt="Demo" width="300" height="auto">
+  <div style="margin-top: 20px;"></div>
+  <figcaption style="text-align:center"><em>Nesty answered the user's questions regarding product classification.</em></figcaption>
+</div>
+
+---
+
 ## Deployment
 
 ### Azure development of chat app

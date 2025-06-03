@@ -6,7 +6,6 @@ import TopVectorTipBlue from "../../assets/top-vector-tip-blue.svg";
 import TopVectorTipGrey from "../../assets/top-vector-tip-grey.svg";
 import { urlMapAtom } from "../../states";
 import { useLoadUrlMap } from "./UrlMap";
-import GoogleMapsStoreDisplay from "./GoogleMap";
 
 const MessageContainer = styled.div`
   display: flex;

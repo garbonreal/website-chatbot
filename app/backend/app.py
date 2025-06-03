@@ -56,6 +56,7 @@ from approaches.promptmanager import PromptyManager
 from approaches.retrievethenread import RetrieveThenReadApproach
 from approaches.retrievethenreadvision import RetrieveThenReadVisionApproach
 from approaches.locationservice import LocationService
+from approaches.structureddataservice import StructuredDataService
 from chat_history.cosmosdb import chat_history_cosmosdb_bp
 from config import (
     CONFIG_ASK_APPROACH,
@@ -193,14 +194,22 @@ async def ask():
         )
 
         await _enhance_response_with_location_info(request_json, r)
+        await _enhance_response_with_structured_data(request_json, r)
 
         return jsonify(r)
     except Exception as error:
         return error_response(error, "/ask")
 
 
+async def _enhance_response_with_structured_data(request_json: dict, response: dict):
+    structured_data_service = StructuredDataService()
+    result = structured_data_service.process_query(request_json["messages"][-1]["content"])
+    if result["message"] != "":
+        response["message"]["content"] = result["message"]
+
+
 async def _enhance_response_with_location_info(request_json: dict, response: dict):
-    api_key = "AIzaSyC9kBOGXQsUrjvMGivbK_KcEPR6YXJtZpc" # current_app.config[CONFIG_GOOGLE_MAPS_API_KEY]
+    api_key = "" # current_app.config[CONFIG_GOOGLE_MAPS_API_KEY]
     location_service = LocationService(api_key)
     
     user_message = location_service.get_latest_user_message(request_json["messages"])
